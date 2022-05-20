@@ -15,11 +15,10 @@ import java.util.StringTokenizer;
  */
 
 public class Solution {
-    private static ArrayList<Character> alphabet = getAlphabet(); // алфавит для шифрования
+    private static final ArrayList<Character> alphabet = getAlphabet(); // алфавит для шифрования
     private static int cryptKey = 0; // криптографический ключ
-    private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in)); // поток чтения из консоли
-
-    private static String sourceFile = "src/sourcefile.txt"; // файл из которого берется текст
+    private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in)); // поток чтения из консоли
+    private static final String sourceFile = "src/sourcefile.txt"; // файл из которого берется текст
 
 
 
