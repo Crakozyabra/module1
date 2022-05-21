@@ -4,10 +4,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Автор - Голубев Иван Владимирович
@@ -15,15 +12,14 @@ import java.util.StringTokenizer;
  */
 
 public class Solution {
-    private static final ArrayList<Character> alphabet = getAlphabet(); // алфавит для шифрования
-    private static int cryptKey = 0; // криптографический ключ
+    private static final List<Character> alphabet = Collections.unmodifiableList(getAlphabet()); // алфавит для шифрования
     private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in)); // поток чтения из консоли
     private static final String sourceFile = "src/sourcefile.txt"; // файл из которого берется текст
 
 
 
     public static void main(String[] args) throws IOException {
-        
+
         printMenu();
 
         int menuPosition = getMenuPosition();
@@ -33,6 +29,8 @@ public class Solution {
 
         if (menuPosition==2)
             secondMode();
+
+
     }
 
     
@@ -43,16 +41,14 @@ public class Solution {
      * @param startIndex стартовый индекс символа в алфавите
      * @return Возвращает индекс символа в алфавите после сдвига
      */
-    private static int getCharPositionInAlphabetBeforeEncrypt(int startIndex) {
+    private static int getCharPositionInAlphabetBeforeEncrypt(int startIndex, int cryptKey) {
         int size = alphabet.size(); // размер разрешенного алфавита
-        int localcryptKey = cryptKey; // сдвиг в локальную переменную
 
-
-        if ((localcryptKey+startIndex)<0){
-            return size+((startIndex + localcryptKey) % size);
+        if ((cryptKey+startIndex)<0){
+            return size+((startIndex + cryptKey) % size);
         }
 
-        return (startIndex + localcryptKey) % size;
+        return (startIndex + cryptKey) % size;
 
     }
 
@@ -97,9 +93,9 @@ public class Solution {
         System.out.println("В режиме \"шифрование / расшифровка\" программа получает путь к текстовому файлу \n" +
                 "с исходным текстом и на его основе создает файл с зашифрованным текстом.\n" +
                 "Введите криптографический ключ (ключ может быть больше, меньше или равен 0):");
-        cryptKey = getIntFromConsole();
+        int cryptKey = getIntFromConsole();
         String textFromFile = getTextFromFile(Path.of(sourceFile));
-        String cryptedText = cryptText(textFromFile);
+        String cryptedText = cryptText(textFromFile, cryptKey);
         putTextToTempFile(cryptedText);
     }
 
@@ -132,8 +128,7 @@ public class Solution {
         System.out.println("Расшифровка подбором ключа от "+min+" до "+max+":");
 
         for (int i = min; i <= max; i++) {
-            cryptKey = i;
-            String cryptedText = cryptText(textFromFile);
+            String cryptedText = cryptText(textFromFile, i);
             System.out.println(i+"  "+cryptedText);
             if (!hasLongWord(cryptedText) && hasComma(cryptedText)) {
                 System.out.println("Подобраный ключ расшифровки: "+i);
@@ -255,14 +250,14 @@ public class Solution {
      * @param afterEncrypt текст до шифрования
      * @return Возвращает зашифрованный текст
      */
-    private static String cryptText(String afterEncrypt) {
+    private static String cryptText(String afterEncrypt, int cryptKey) {
         StringBuilder beforeEncrypt = new StringBuilder();
         int size = alphabet.size();
         int j = 0;
         char[] chars = afterEncrypt.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (alphabet.contains(chars[i])) {
-                j = getCharPositionInAlphabetBeforeEncrypt(alphabet.indexOf(chars[i]));
+                j = getCharPositionInAlphabetBeforeEncrypt(alphabet.indexOf(chars[i]), cryptKey);
                 beforeEncrypt.append(alphabet.get(j));
             }
         }
@@ -276,7 +271,7 @@ public class Solution {
      * Возвращает упорядоченное разрешенное множество
      * (алфавит)
      */
-    private static ArrayList<Character> getAlphabet(){
+    private static List<Character> getAlphabet(){
         ArrayList<Character> characters = new ArrayList<>(){{ // список, а не множество. все равно не повторяются символы
             add(' '); //32
             add('!'); //33
