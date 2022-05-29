@@ -469,31 +469,4 @@ public class Solution extends Application{
         return characters;
     }
 
-
-    // класс, т.к. проблемы с передачей в лямбды только финальных значений переменных, а менять что то в объекте
-    // c постоянной ссылкой показалось неправильным
-    public static class MyEventHandler<T extends ActionEvent> implements EventHandler<ActionEvent> {
-        private Path path;
-        private FileChooser fileChooser;
-        private Text resultFilePath;
-        private Stage primaryStage;
-        public MyEventHandler(Path path, FileChooser fileChooser, Text resultFilePath, Stage stage) {
-            this.path = path;
-            this.fileChooser = fileChooser;
-            this.resultFilePath = resultFilePath;
-            this.primaryStage = stage;
-        }
-
-        @Override
-        public void handle(ActionEvent event) {
-            File file = fileChooser.showOpenDialog(primaryStage);
-
-            if (file != null) {
-                resultFilePath.setText(file.getAbsolutePath());
-                path = file.toPath();
-            }
-
-        }
-    }
-
 }
