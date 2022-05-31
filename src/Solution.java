@@ -1,6 +1,4 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -30,8 +28,6 @@ public class Solution extends Application{
     private static final List<Character> alphabet = Collections.unmodifiableList(getAlphabet());
     private static final String sourceFileDefault = "src"+File.separator+"sourcefile.txt";
     private static final String resultFileDefault = "src"+File.separator+"resultfile.txt";
-
-    // не могут в final, т.к. изменяются и используются в анонимном классе:
     private static Path sourceFileDefaultPath = Path.of(sourceFileDefault).toAbsolutePath();
     private static Path resultFileDefaultPath = Path.of(resultFileDefault).toAbsolutePath();
 
@@ -147,7 +143,6 @@ public class Solution extends Application{
         serviceInformationTextGridPane.add(serviceInformationTextArea,0,1);
 
 
-
         // все GUI выравниваем по сетке и устанавливаем промежутки между ними
         GridPane gridPaneAll = new GridPane();
         gridPaneAll.add(sourceTextGridPane, 0, 0);
@@ -160,8 +155,6 @@ public class Solution extends Application{
         gridPaneAll.setPadding(new Insets(10, 10, 10, 10));
 
 
-
-        //-------------------------------------------------------------------------------------------------------------
         // устанавливаем обработчики событий
         radioButtonFirstMode.setOnAction((e)->{
             firstKeyFirstModeTextField.setDisable(false);
@@ -271,12 +264,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Вычисляет позицию символа в алфавите после шифрования
-     * @param startIndex стартовый индекс символа в алфавите
-     * @param cryptKey ключ шифрования
-     * @return Возвращает индекс символа в алфавите после сдвига
-     */
     private static int getCharPositionInAlphabetBeforeEncrypt(int startIndex, int cryptKey) {
         int size = alphabet.size();
 
@@ -292,11 +279,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Проверяет текст на наличие слишком длинных слов
-     * @param text текст для анадиза длинных слов
-     * @return Возвращает наличие или отсутствие длинных слов
-     */
     private static boolean hasLongWord(String text) {
         int defaultMaxLength = 30;
         StringTokenizer stringTokenizer = new StringTokenizer(text," ");
@@ -313,11 +295,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Проверяет текст на наличие зяпятых
-     * @param text текст для анадиза длинных слов
-     * @return Возвращает наличие или отсутствие запятых
-     */
     private static boolean hasComma(String text) {
         char[] chars = text.toCharArray();
 
@@ -333,11 +310,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Читает и возвращает текст из файла
-     * @param path путь к файлу из которого функция читает текст
-     * @return Возвращает текст в виде строки из файла
-     */
     public static String getTextFromFile(Path path) {
         List<String> strings = new ArrayList<>();
         try {
@@ -356,11 +328,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Записывает текст во временный файл
-     * @param text текст для записи в файл
-     * @param path путь к файлу
-     */
     public static void putTextToFile(String text, Path path) {
         try {
             Files.writeString(path,text);
@@ -373,12 +340,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Шифрует текст с конкретным сдвигом
-     * @param afterEncrypt текст до шифрования
-     * @param cryptKey ключ шифрования
-     * @return Возвращает зашифрованный текст
-     */
     private static String cryptText(String afterEncrypt, int cryptKey) {
         StringBuilder beforeEncrypt = new StringBuilder();
         int size = alphabet.size();
@@ -397,13 +358,6 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Шифровка текста в диапазоне ключей
-     * @param afterEncrypt текст до шифрования
-     * @param cryptKey1 ключ шифрования
-     * @param cryptKey2 ключ шифрования
-     * @return Возвращает зашифрованный текст
-     */
     private static List<String> cryptTextWithRangeKey(String afterEncrypt, int cryptKey1, int cryptKey2) {
         int max;
         int min;
@@ -440,12 +394,8 @@ public class Solution extends Application{
 
 
 
-    /**
-     * Возвращает упорядоченное разрешенное множество
-     * (алфавит)
-     */
     private static List<Character> getAlphabet(){
-        ArrayList<Character> characters = new ArrayList<>(){{ // список, а не множество. все равно не повторяются символы
+        ArrayList<Character> characters = new ArrayList<>(){{
             add(' '); //32
             add('!'); //33
             add('"'); //34
